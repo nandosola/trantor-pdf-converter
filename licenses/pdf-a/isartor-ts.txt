@@ -1,0 +1,13 @@
+Terms of Use
+
+The Isartor test suite is available from www.pdfa.org free of charge. The PDF/A Competence Center, developer of the test suite, holds all rights in the test suite contents and its associated documentation. The following rights are granted free of charge to anyone:
+
+The right to use the Isartor test suite to check PDF validation software.
+The right for a software vendor or distributor to issue a declaration to the effect that the software produced or distributed by the vendor or distributor partially or completely conforms to the Isartor test suite. A detailed list of test results must be made available as part of the declaration.
+The right to analyze the internal structure of the files comprising the Isartor test suite with the sole purpose of determining PDF/A conformance.
+All other rights are reserved, and other uses are not covered by these terms of use. For clarity, using the Isartor test suite as the basis for certifying third-party products (i.e. the software vendor/distributor and the certifying agency are separate entities) is not allowed. Redistributing all or parts of the Isartor test suite is also not allowed. Using the Isartor test suite in a way which is not covered by the list of free rights above requires a written license agreement with the PDF/A Competence Center.
+
+Copyright © 2011 PDF/A Competence Center, www.pdfa.org
+
+Contact
+Please contact info@pdfa.org if you have any questions regarding the terms of use and redistribution policy.

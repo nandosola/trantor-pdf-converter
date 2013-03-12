@@ -1,0 +1,336 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <organization>
+        <name>abstra.cc factoría de software, s.a.</name>
+        <url>http://www.abstra.cc</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License, Version 3.0</name>
+            <url>http://www.gnu.org/copyleft/lesser.html</url>
+        </license>
+    </licenses>
+    <groupId>cc.abstra.pasilla</groupId>
+    <artifactId>imageutils</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>imageutils</name>
+    <url>http://maven.apache.org</url>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <bavaria.file>2009-04-03-Bavaria-pdfa.zip</bavaria.file>
+        <isartor.file>isartor-pdfa-2008-08-13.zip</isartor.file>
+        <jai.binaries>jai-1_1_3-lib-linux-amd64.tar.gz</jai.binaries>
+        <imageio.binaries>jai_imageio-1_1-lib-linux-amd64.tar.gz</imageio.binaries>
+    </properties>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-http-lightweight</artifactId>
+                <version>2.2</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <includeScope>runtime</includeScope>
+                            <excludeArtifactIds>jai_core</excludeArtifactIds>
+                            <!-- this prevents a duplicate between jai_core & jai-core -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>wagon-maven-plugin</artifactId>
+                <version>1.0-beta-4</version>
+                <executions>
+                    <execution>
+                        <id>download-jai-binaries</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>download-single</goal>
+                        </goals>
+                        <configuration>
+                            <serverId>java-net</serverId>
+                            <url>http://download.java.net/media/jai/builds/release/1_1_3</url>
+                            <fromFile>${jai.binaries}</fromFile>
+                            <toDir>${project.build.directory}/temp</toDir>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-imageio-binaries</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>download-single</goal>
+                        </goals>
+                        <configuration>
+                            <serverId>java-net</serverId>
+                            <url>http://download.java.net/media/jai-imageio/builds/release/1.1</url>
+                            <fromFile>${imageio.binaries}</fromFile>
+                            <toDir>${project.build.directory}/temp</toDir>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- The tiff files were found around the web.
+                          Please contact me if you own the copyright of an image and you want it to be removed -->
+                        <id>download-test-tiff-files</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>download-single</goal>
+                        </goals>
+                        <configuration>
+                            <serverId>my-s3-account</serverId>
+                            <url>https://s3-eu-west-1.amazonaws.com/dev-stuff/imageutils</url>
+                            <fromFile>test-resource-tiffs.zip</fromFile>
+                            <toDir>${project.build.directory}/temp</toDir>
+                        </configuration>
+                    </execution>
+                    <!-- Specific tasks to circumvent Bavaria & Isartor test suites' restrictive TOS -->
+                    <execution>
+                        <!-- Redistributing all or parts of the Bavaria report or the accompanying test
+                          documents requires written permission of PDFlib GmbH. -->
+                        <id>download-bavaria-test-suite</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>download-single</goal>
+                        </goals>
+                        <configuration>
+                            <serverId>pdflib</serverId>
+                            <url>http://www.pdflib.com/fileadmin/pdflib/Bavaria</url>
+                            <fromFile>${bavaria.file}</fromFile>
+                            <toDir>${project.build.directory}/temp</toDir>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- Please read the terms of use:
+                          http://www.pdfa.org/2011/08/download-isartor-test-suite/
+                          (Redistributing all or parts of the Isartor test suite is not allowed )-->
+                        <id>download-isartor-test-suite</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>download-single</goal>
+                        </goals>
+                        <configuration>
+                            <serverId>pdfa-association</serverId>
+                            <url>http://www.pdfa.org/wp-content/uploads/2011/08</url>
+                            <fromFile>${isartor.file}</fromFile>
+                            <toDir>${project.build.directory}/temp</toDir>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>unzip-test-data</id>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <target name="unzip-and-copy-test-files">
+
+                                <untar src="${project.build.directory}/temp/${jai.binaries}"
+                                       dest="${project.build.directory}/lib"
+                                       compression="gzip">
+                                    <patternset>
+                                        <include name="**/lib/libmlib_jai.so"/>
+                                        <include name="**/lib/mlibwrapper_jai.jar"/>
+                                    </patternset>
+                                    <mapper type="flatten"/>
+                                </untar>
+
+                                <untar src="${project.build.directory}/temp/${imageio.binaries}"
+                                       dest="${project.build.directory}/lib"
+                                       compression="gzip">
+                                    <patternset>
+                                        <include name="**/lib/libclib_jiio.so"/>
+                                        <include name="**/lib/clibwrapper_jiio.jar"/>
+                                    </patternset>
+                                    <mapper type="flatten"/>
+                                </untar>
+
+                                <unzip src="${project.build.directory}/temp/test-resource-tiffs.zip"
+                                       dest="${project.basedir}/src/test/resources/tiff-files" />
+
+                                <unzip src="${project.build.directory}/temp/${bavaria.file}"
+                                       dest="${project.build.directory}/temp" />
+
+                                <unzip src="${project.build.directory}/temp/${isartor.file}"
+                                       dest="${project.build.directory}/temp/Bavaria testsuite/nonconforming"/>
+
+                                <fileset id="nok" dir="${project.build.directory}/temp/Bavaria testsuite/nonconforming">
+                                    <exclude name="Isartor testsuite/doc/**"/>
+                                    <!-- pdfbox's preflight does not work properly with the files below (most likely bugs)
+                                      TODO: file bugs at https://issues.apache.org/jira/browse/PDFBOX/component/12315215 -->
+                                    <exclude name="**/hopf1971.pdf"/>
+                                    <exclude name="**/literat.pdf"/>
+                                    <exclude name="**/modules_acrobat9.pdf"/>
+                                    <exclude name="**/Pardes13_Art02.pdf"/>
+                                    <include name="**/*.pdf"/>
+                                </fileset>
+                                <fileset id="ok" dir="${project.build.directory}/temp/Bavaria testsuite/conforming">
+                                    <!-- pdfbox's preflight does not work properly with the files below (most likely bugs)
+                                       TODO: file bugs at https://issues.apache.org/jira/browse/PDFBOX/component/12315215 -->
+                                    <exclude name="**/04-Metadaten-KK.pdf"/>
+                                    <exclude name="**/adobe7pie.pdf"/>
+                                    <exclude name="**/fmbl-2009-01.pdf"/>
+                                    <exclude name="**/foerster_diss.pdf"/>
+                                    <exclude name="**/good0002.pdf"/>
+                                    <exclude name="**/good0011.pdf"/>
+                                    <exclude name="**/good0015.pdf"/>
+                                    <exclude name="**/jmbl-2009-01.pdf"/>
+                                    <exclude name="**/mm_image2pdfa.pdf"/>
+                                    <exclude name="**/PDFA_Conference_2009.pdf"/>
+                                    <exclude name="**/pdfa1b.pdf"/>
+                                    <exclude name="**/pueschel_etal_1987.pdf"/>
+                                    <include name="**/*.pdf"/>
+                                </fileset>
+                                <copy todir="${project.basedir}/src/test/resources/pdf-files/PDFA-1b/nonconforming">
+                                    <fileset refid="nok" />
+                                    <mapper type="flatten" />
+                                </copy>
+                                <copy todir="${project.basedir}/src/test/resources/pdf-files/PDFA-1b/conforming">
+                                    <fileset refid="ok" />
+                                    <mapper type="flatten" />
+                                </copy>
+                                <!-- Bavaria test suite's "unclear" test files are not used -->
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.basedir}/src/test/resources</directory>
+                            <includes>
+                                <include>tiff-files/**/*</include>
+                                <include>pdf-files/**/*</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <!-- WARNING: jai-codec and jai-imageio include platform-dependent dependencies, which have been already
+              downloaded via the maven-wagon-plugin. -->
+            <groupId>com.sun.media</groupId>
+            <artifactId>jai_imageio</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.media</groupId>
+            <artifactId>jai-codec</artifactId>
+            <version>1.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.sanselan</groupId>
+            <artifactId>sanselan</artifactId>
+            <version>0.97-incubator</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mortennobel</groupId> <!-- LGPL v3 -->
+            <artifactId>java-image-scaling</artifactId>
+            <version>0.8.5</version>
+        </dependency>
+        <dependency>
+            <!-- Nexus-hosted. See: http://code.google.com/p/java-image-scaling/issues/detail?id=12 -->
+            <groupId>com.jhlabs</groupId> <!-- APL v2.0 -->
+            <artifactId>image-filters</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.icepdf</groupId>
+            <artifactId>icepdf-core</artifactId>
+            <version>4.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.drewnoakes</groupId>
+            <artifactId>metadata-extractor</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>  <!-- APL v2.0 -->
+            <artifactId>pdfbox</artifactId>
+            <version>1.8.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>  <!-- APL v2.0 -->
+            <artifactId>preflight</artifactId>
+            <version>1.8.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>1.46</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

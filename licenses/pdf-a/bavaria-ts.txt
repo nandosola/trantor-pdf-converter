@@ -1,0 +1,26 @@
+Bavaria testsuite for PDF/A-1b
+==============================
+
+More information about the Bavaria test suite for PDF/A-1 and
+instructions regarding the use of these files can be found at
+www.pdflib.com/developer/pdfa/validation_report.
+
+
+The Bavaria testsuite requires the Isartor testsuite which is not
+included in the Bavaria package:
+
+- Download the Isartor zip file from the following location:
+  http://www.pdfa.org/lib/exe/fetch.php?id=pdfa%3Aen%3Aisartor_test_suite%3Adownload&cache=cache&media=pdfa:en:isartor_test_suite:isartor-pdfa-2008-08-13.zip
+  
+  More information about the Isartor testsuite:
+  http://www.pdfa.org/doku.php?id=pdfa:en:isartor_test_suite:download
+  
+- Unpack isartor-pdfa-2008-08-13.zip in the directory data/nonconforming
+  in the Bavaria directory hierarchy.
+  
+  
+Copyright © 2009 PDFlib GmbH. All rights reserved.
+
+Redistributing all or parts of the Bavaria report or the accompanying test
+documents requires written permission of PDFlib GmbH.
+
