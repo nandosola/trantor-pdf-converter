@@ -18,13 +18,20 @@ The main goal is achieving [PDF/a1-b](http://www.pdfa.org/2011/08/improved-pdfa-
 1. The dependency named `image-filters` is fetched froum our local Nexus repository. If you don't have a local Maven
 repo, please download them to a known directory and change the dependency scope to `system`.
 1. Execute `mvn clean package`.
-1. Please find under the `target/` directory both the artifact `imageutils-1.0-SNAPSHOT.jar` and its dependencies
- under `target/lib/`.
+1. Please find under the `target/` directory both the artifact `imageutils-1.0-SNAPSHOT.jar`. The dependencies (including
+ `.so` files) are located under `target/lib/`.
+
+The binary dependencies (`.so`s) require the following environmental variables to be set:
+
+1. `JAIHOME` must point to the directory where `libclib_jiio.so` and `libmlib_jai.so` are located.
+1. `LD_LIBRARY_PATH` must include `JAIHOME`
+
+Thus, any application using `imageutils` should declare the variables above.
 
 ## Known issues
 
-* Binary dependencies (jai & jai_imageio) are downloaded for `linux-amd64`. If you want to change the target platform,
- have a look at the project's `pom.xml`
+* Binary dependencies (`jai` & `jai_imageio`) are downloaded for `linux-amd64`. If you want to change the target platform,
+ have a look at the project's `pom.xml`.
 * Images smaller than DIN-A4 are stretched to fill the entire page.
 
 ## TODO
