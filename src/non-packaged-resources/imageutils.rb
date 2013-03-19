@@ -18,12 +18,8 @@ if java.lang.System.get_property('os.name').downcase.include?('linux')
   ENV['JAIHOME'] = extdir + platform
 
   # ld_library_path is bad: http://xahlee.info/UnixResource_dir/_/ldpath.html
-  # (and frozen in ruby)
-  ENV['LD_RUN_PATH'] << if ENV['LD_RUN_PATH'].nil?
-                         ENV['JAIHOME']
-                       else
-                         ':'+ENV['JAIHOME']
-                       end
+  ENV['LD_RUN_PATH'] = ENV['JAIHOME']
+
   $CLASSPATH << ENV['JAIHOME']
   require "ext#{platform}/mlibwrapper_jai.jar"
   require "ext#{platform}/clibwrapper_jiio.jar"
