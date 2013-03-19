@@ -5,7 +5,7 @@ is generated. It can import image PDFs too. As the development goes on, more ima
  be accepted and converted to PDF. In any case, the minimum resolution for the files to be accepted is 300dpi. Thumbnails
 are generated at a resolution of 72 dpi.
 
-For now, this is a work in progress for an internal project. However, the information on the Internet is so scarce and
+For now, this is a work in progress for an internal JRuby project. However, the information on the Internet is so scarce and
 spread, that this code might help you.
 
 The main goal is achieving [PDF/a1-b](http://www.pdfa.org/2011/08/improved-pdfa-1b/) compliance in order to store these
@@ -17,22 +17,27 @@ The main goal is achieving [PDF/a1-b](http://www.pdfa.org/2011/08/improved-pdfa-
 1. Clone the project.
 1. The dependency named `image-filters` is fetched froum our local Nexus repository. If you don't have a local Maven
 repo, please download them to a known directory and change the dependency scope to `system`.
-1. Execute `mvn clean package`.
-1. Please find under the `target/` directory both the artifact `imageutils-1.0-SNAPSHOT.jar`. The dependencies (including
- `.so` files) are located under `target/lib/`.
+1. Execute `mvn clean install`.
 
-The binary dependencies (`.so`s) require the following environmental variables to be set:
+* The JRuby gem is ready to be generated from `target/ruby-gem`. There is [an experimental gem](https://rubygems.org/gems/imageutils) already deployed at RubyGems
+* For Java users: the artifact is located under the `target/` directory. Its dependencies are located under `target/ruby-gem/lib`.
+ The binary extensions and their JNI adapters are located under `target/ruby-gem/lib`.
+
+Note that, if you want to use the artifacts from pure Java, the binary dependencies (`.so` files) require the following environmental variables to be set:
 
 1. `JAIHOME` must point to the directory where `libclib_jiio.so` and `libmlib_jai.so` are located.
-1. `LD_LIBRARY_PATH` must include `JAIHOME`
+1. Add `JAIHOME` to your `CLASSPATH` too.
+1. `LD_LIBRARY_PATH` must include `JAIHOME`.
 
-Thus, any application using `imageutils` should declare the variables above.
+Thus, any Java application using `imageutils` should declare the variables above. The JRuby gem declares the variables above automatically when required.
 
 ## Known issues
 
 * Binary dependencies (`jai` & `jai_imageio`) are downloaded for `linux-amd64`. If you want to change the target platform,
  have a look at the project's `pom.xml`.
 * Images smaller than DIN-A4 are stretched to fill the entire page.
+* AFAIK, [there is a bug](https://github.com/rubygems/rubygems/issues/507) up to JRuby 1.7.3 that prevents pushing gems to RubyGems.
+ So if you want to publish your own gem, at least 1.7.4-dev should be used. In my case, the gem was pushed via MRI 1.9.3.
 
 ## TODO
 

@@ -15,13 +15,18 @@
     </licenses>
     <groupId>cc.abstra.pasilla</groupId>
     <artifactId>imageutils</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>imageutils</name>
-    <url>http://maven.apache.org</url>
-
-
+    <url>http://github.com/nandosola/imageutils</url>
+    <developers>
+        <developer>
+            <id>nandosola</id>
+            <name>Nando Sola</name>
+            <email>nando@abstra.cc</email>
+        </developer>
+    </developers>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <bavaria.file>2009-04-03-Bavaria-pdfa.zip</bavaria.file>
@@ -29,6 +34,7 @@
         <jai.binaries>jai-1_1_3-lib-linux-amd64.tar.gz</jai.binaries>
         <imageio.binaries>jai_imageio-1_1-lib-linux-amd64.tar.gz</imageio.binaries>
         <pdfbox.version>1.8.0-SNAPSHOT</pdfbox.version>
+        <rubygem.dir>${project.build.directory}/ruby-gem</rubygem.dir>
     </properties>
 
     <build>
@@ -40,51 +46,6 @@
             </extension>
         </extensions>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <showDeprecation>true</showDeprecation>
-                    <showWarnings>true</showWarnings>
-                    <fork>true</fork>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                            <includeScope>runtime</includeScope>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>wagon-maven-plugin</artifactId>
@@ -112,17 +73,17 @@
                             <goal>download-single</goal>
                         </goals>
                         <configuration>
-                        <!-- Installation instructions:
-                          http://download.java.net/media/jai-imageio/builds/release/1.1/INSTALL-jai_imageio.html -->
+                            <!-- Installation instructions:
+                              http://download.java.net/media/jai-imageio/builds/release/1.1/INSTALL-jai_imageio.html -->
                             <serverId>java-net</serverId>
                             <url>http://download.java.net/media/jai-imageio/builds/release/1.1</url>
                             <fromFile>${imageio.binaries}</fromFile>
                             <toDir>${project.build.directory}/temp</toDir>
-                    </configuration>
-                </execution>
-                <execution>
-                    <!-- The tiff files were found around the web.
-                      Please contact me if you own the copyright of an image and you want it to be removed -->
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- The tiff files were found around the web.
+                          Please contact me if you own the copyright of an image and you want it to be removed -->
                         <id>download-test-tiff-files</id>
                         <phase>process-resources</phase>
                         <goals>
@@ -177,11 +138,13 @@
                     <execution>
                         <id>unzip-test-data</id>
                         <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                         <configuration>
                             <target name="unzip-and-copy-test-files">
-
                                 <untar src="${project.build.directory}/temp/${jai.binaries}"
-                                       dest="${project.build.directory}/lib"
+                                       dest="${rubygem.dir}/lib/ext/linux-amd64"
                                        compression="gzip">
                                     <patternset>
                                         <include name="**/lib/libmlib_jai.so"/>
@@ -191,7 +154,7 @@
                                 </untar>
 
                                 <untar src="${project.build.directory}/temp/${imageio.binaries}"
-                                       dest="${project.build.directory}/lib"
+                                       dest="${rubygem.dir}/lib/ext/linux-amd64"
                                        compression="gzip">
                                     <patternset>
                                         <include name="**/lib/libclib_jiio.so"/>
@@ -247,9 +210,157 @@
                                 <!-- Bavaria test suite's "unclear" test files are not used -->
                             </target>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-gemspec</id>
+                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>copy-resources</goal>
                         </goals>
+                        <configuration>
+                            <outputDirectory>${rubygem.dir}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/non-packaged-resources</directory>
+                                    <includes>
+                                        <include>imageutils.gemspec</include>
+                                        <filtering>false</filtering>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-imageutils-loader</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${rubygem.dir}/lib</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/non-packaged-resources</directory>
+                                    <includes>
+                                        <include>imageutils.rb</include>
+                                        <filtering>false</filtering>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-project-license-and-rbenv-version</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${rubygem.dir}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>LICENSE</include>
+                                    </includes>
+                                    <filtering>false</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>src/non-packaged-resources</directory>
+                                    <includes>
+                                        <include>.ruby-version</include>
+                                        <filtering>false</filtering>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-3rd-party-licenses</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${rubygem.dir}/3rd-party-licenses</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/licenses</directory>
+                                    <includes>
+                                        <include>jai*/*</include>
+                                    </includes>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${rubygem.dir}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-installed</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>${project.packaging}</type>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${rubygem.dir}/lib</outputDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -271,7 +382,6 @@
             </plugin>
         </plugins>
     </build>
-
     <dependencies>
         <dependency>
             <!-- WARNING: jai-codec and jai-imageio include platform-dependent dependencies, which have been already
