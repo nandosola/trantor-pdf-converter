@@ -1,7 +1,7 @@
 # create by maven - leave it as is
 Gem::Specification.new do |s|
   s.name = 'imageutils'
-  s.version = '0.0.1'
+  s.version = '${project.version}'
   s.platform = 'java'
 
   s.summary = 'PDF image utils (experimental)'

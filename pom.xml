@@ -15,7 +15,7 @@
     </licenses>
     <groupId>cc.abstra.pasilla</groupId>
     <artifactId>imageutils</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
 
     <name>imageutils</name>
@@ -254,8 +254,8 @@
                                     <directory>src/non-packaged-resources</directory>
                                     <includes>
                                         <include>imageutils.gemspec</include>
-                                        <filtering>false</filtering>
                                     </includes>
+                                    <filtering>true</filtering>
                                 </resource>
                             </resources>
                         </configuration>
@@ -273,7 +273,6 @@
                                     <directory>src/non-packaged-resources</directory>
                                     <includes>
                                         <include>imageutils.rb</include>
-                                        <filtering>false</filtering>
                                     </includes>
                                 </resource>
                             </resources>
@@ -293,13 +292,11 @@
                                     <includes>
                                         <include>LICENSE</include>
                                     </includes>
-                                    <filtering>false</filtering>
                                 </resource>
                                 <resource>
                                     <directory>src/non-packaged-resources</directory>
                                     <includes>
                                         <include>.ruby-version</include>
-                                        <filtering>false</filtering>
                                     </includes>
                                 </resource>
                             </resources>
@@ -319,7 +316,6 @@
                                     <includes>
                                         <include>jai*/*</include>
                                     </includes>
-                                    <filtering>false</filtering>
                                 </resource>
                             </resources>
                         </configuration>
