@@ -1,11 +1,11 @@
 # create by maven - leave it as is
 Gem::Specification.new do |s|
   s.name = 'imageutils'
-  s.version = '0.1'
+  s.version = '0.0.1'
   s.platform = 'java'
 
-  s.summary = 'PDF image utils'
-  s.description = 'Java Library to transform scanned image docs (PDF, TIF, GIF, JPG, PNG) into PDF/A-1b. It has some extra features too'
+  s.summary = 'PDF image utils (experimental)'
+  s.description = 'This gem wraps a Java Library to transform scanned image docs (PDF, TIF, GIF, JPG, PNG) into PDF/A-1b. It has some extra features too'
   s.homepage = 'http://github.com/nandosola/imageutils'
 
   s.authors = ['Nando Sola']

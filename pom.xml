@@ -15,7 +15,7 @@
     </licenses>
     <groupId>cc.abstra.pasilla</groupId>
     <artifactId>imageutils</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
 
     <name>imageutils</name>
@@ -342,6 +342,7 @@
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
+                            <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
                     <execution>
@@ -360,6 +361,7 @@
                                 </artifactItem>
                             </artifactItems>
                             <outputDirectory>${rubygem.dir}/lib</outputDirectory>
+                            <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
                 </executions>
