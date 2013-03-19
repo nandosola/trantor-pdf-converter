@@ -14,6 +14,7 @@ The main goal is achieving [PDF/a1-b](http://www.pdfa.org/2011/08/improved-pdfa-
 
 ## Usage
 
+1. Make sure you have at least Open/Oracle JDK 1.7.0_15
 1. Clone the project.
 1. The dependency named `image-filters` is fetched froum our local Nexus repository. If you don't have a local Maven
 repo, please download them to a known directory and change the dependency scope to `system`.
@@ -27,7 +28,7 @@ Note that, if you want to use the artifacts from pure Java, the binary dependenc
 
 1. `JAIHOME` must point to the directory where `libclib_jiio.so` and `libmlib_jai.so` are located.
 1. Add `JAIHOME` to your `CLASSPATH` too.
-1. `LD_LIBRARY_PATH` must include `JAIHOME`.
+1. `LD_LIBRARY_PATH` (or `LD_RUN_PATH` if not executed from commandline or script) must include `JAIHOME`.
 
 Thus, any Java application using `imageutils` should declare the variables above. The JRuby gem declares the variables above automatically when required.
 
