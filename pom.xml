@@ -15,7 +15,7 @@
     </licenses>
     <groupId>cc.abstra.pasilla</groupId>
     <artifactId>imageutils</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
 
     <name>imageutils</name>
@@ -339,6 +339,7 @@
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
                             <stripVersion>true</stripVersion>
+                            <excludeScope>test</excludeScope>
                         </configuration>
                     </execution>
                     <execution>
@@ -432,9 +433,11 @@
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>1.46</version>
+            <artifactId>bcprov-jdk15</artifactId>
+            <version>1.45</version>
             <scope>runtime</scope>
+            <!-- JRuby version ~> 1.7.3 bundles the whole openssl enchilada, based on 'bcprov-jdk15'.
+              For maximum compatibility, please do not alter the artifact, nor its version -->
         </dependency>
         <dependency>
             <groupId>junit</groupId>

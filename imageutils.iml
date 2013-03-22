@@ -36,7 +36,7 @@
     <orderEntry type="library" name="Maven: org.apache.pdfbox:xmpbox:1.8.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.12" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:activation:1.1.1" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.bouncycastle:bcprov-jdk16:1.46" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.bouncycastle:bcprov-jdk15:1.45" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
   </component>

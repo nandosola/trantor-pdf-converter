@@ -3,7 +3,10 @@ extdir = File.join(libdir, 'ext')
 $CLASSPATH << libdir
 
 Dir["#{libdir}/*.jar"].each do |jar|
-  require jar unless /[mc]libwrapper_j(ai|iio)\.jar/ =~ jar
+  # JRuby includes all the openssl stuff from 1.7.3 onwards
+  unless JRUBY_VERSION >= '1.7.3' && /bcprov-jdk15\.jar/ =~ jar
+    require jar
+  end
 end
 
 platform = ''
