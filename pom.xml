@@ -339,7 +339,7 @@
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
                             <stripVersion>true</stripVersion>
-                            <excludeScope>test</excludeScope>
+                            <includeScope>runtime</includeScope>
                         </configuration>
                     </execution>
                     <execution>
