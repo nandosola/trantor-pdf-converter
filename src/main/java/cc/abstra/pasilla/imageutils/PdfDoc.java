@@ -4,27 +4,28 @@ package cc.abstra.pasilla.imageutils;
  *
  * @author nando
  */
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.activation.FileDataSource;
-import javax.imageio.ImageIO;
 
 import org.apache.pdfbox.pdfparser.PDFStreamParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.graphics.xobject.PDPixelMap;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import org.apache.pdfbox.preflight.PreflightDocument;
 import org.apache.pdfbox.preflight.ValidationResult;
 import org.apache.pdfbox.preflight.exception.SyntaxValidationException;
 import org.apache.pdfbox.preflight.parser.PreflightParser;
 import org.apache.pdfbox.util.PDFOperator;
+
+import javax.activation.FileDataSource;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PdfDoc {
 
@@ -103,24 +104,8 @@ public class PdfDoc {
                 Map<String, Object> pageInfo = new LinkedHashMap<>();
                 PDPage currentPage = (PDPage)pdPage;
 
-                if (!hasText(currentPage)) {  //scanned pages
-                    // TODO: use PDResources.getImages()
-
-                    BufferedImage img = currentPage.convertToImage(BufferedImage.TYPE_BYTE_GRAY, Consts.PRINTING_DPI);
-
-                    //imgInfo.put(Consts.PAGE_SIZE_KEY, "A4");  //TODO: get dinamically from Consts.getDINSize()
-                    pageInfo.put(Consts.LANDSCAPE_KEY, false); // TODO: get dinamically
-
-                    // no enhance & scale here: it's already done by convertToImage()
-                    // See: PDFBox sources -- org/apache/pdfbox/pdmodel/PDPage.java
-                    pageInfo.put(Consts.IMAGE_KEY, ImageHelper.resizeImageToDINA4WithDPI(img, Consts.PREVIEW_DPI,
-                            Consts.PREVIEW_DPI));  // FIXME: get actual DPI
-
-                } else {
-                    // TODO: resize page b/c it could be bigger/smaller than A4
-                    pageInfo.put(Consts.IMAGE_KEY, currentPage);
-                }
-
+                pageInfo.put(Consts.PAGE_SIZE_KEY, PDPage.PAGE_SIZE_A4);  //default preview size
+                pageInfo.put(Consts.IMAGE_KEY, currentPage);
                 pageList.add(pageInfo);
             }
 
@@ -152,13 +137,9 @@ public class PdfDoc {
 
                 if (imgKey instanceof BufferedImage) {
                     BufferedImage bi = (BufferedImage) imgKey;
-                    if (!bi.getColorModel().getColorSpace().isCS_sRGB()) {
-                        throw new RuntimeException("ColorSpace must be sRGB");
-                    }
 
                     page = new PDPage(PDPage.PAGE_SIZE_A4);
-                    //PDPixelMap constructor removes the alpha channel
-                    ximage = new PDPixelMap(pdDoc, bi);
+                    ximage = new PDJpeg(pdDoc, bi);
 
                     double vOffset = (Consts.A4_H_INCHES * Consts.INCH_TO_POINT) - ximage.getHeight();
                     double hOffset = 0;

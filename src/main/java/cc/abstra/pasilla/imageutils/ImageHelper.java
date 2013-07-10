@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
+import java.awt.image.ColorModel;
 import java.awt.image.RenderedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,7 +61,8 @@ public class ImageHelper {
         if (origRi instanceof BufferedImage) {
             image = (BufferedImage) origRi;
         } else {
-            image = PlanarImage.wrapRenderedImage(origRi).getAsBufferedImage();
+            ColorModel cm = PlanarImage.createColorModel(origRi.getSampleModel());
+            image = PlanarImage.wrapRenderedImage(origRi).getAsBufferedImage(null, cm);
         }
         if(applyAlpha){  //HACK until TiffDoc.toPdf readers are used in .toPng
             int origColorSpace = image.getColorModel().getColorSpace().getType();
