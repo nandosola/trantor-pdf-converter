@@ -20,41 +20,34 @@ import java.util.logging.Logger;
  */
 public class ImageHelper {
 
-    static BufferedImage resizeImageToDINA4WithDPI(BufferedImage origImage, int origDpiX, int origDpiY) {
+    static BufferedImage resizeImageToDINA4WithDPI(BufferedImage img, int previewDpi, float scaleDown) {
+        return resizeImageToDINA4WithDPI(img, previewDpi, previewDpi, previewDpi, previewDpi, scaleDown);
+    }
 
-        float targetSizeX = (float)Consts.millisToPixels(Consts.A4_W_MM, origDpiX)/origImage.getWidth();
-        float targetSizeY = (float)Consts.millisToPixels(Consts.A4_H_MM, origDpiY)/origImage.getHeight();
-        float scalingFactor = (float)getScalingFactor(origImage);
+    static BufferedImage resizeImageToDINA4WithDPI(BufferedImage origImage, int targetDpiX, int targetDpiY,
+                                                   int origDpiX, int origDpiY) {
+        return resizeImageToDINA4WithDPI(origImage, targetDpiX, targetDpiY, origDpiX, origDpiY, 1.0f);
+    }
+
+    private static BufferedImage resizeImageToDINA4WithDPI(BufferedImage origImage, int targetDpiX, int targetDpiY,
+                                                   int origDpiX, int origDpiY, float scaleDown) {
+
+        float targetRatioX = (float)Consts.millisToPixels(Consts.A4_W_MM, targetDpiX)/origImage.getWidth();
+        float targetRatioY = (float)Consts.millisToPixels(Consts.A4_H_MM, targetDpiY)/origImage.getHeight();
+        float targetRatio = Math.min(1.0f, Math.min(targetRatioX, targetRatioY)/scaleDown);
 
         Logger.getLogger(ImageHelper.class.getName()).log(Level.INFO,
                 "Resizing BufferedImage (px) --- "+
                         "Original dimensions: ("+Integer.toString(origImage.getWidth())+
                         ","+Integer.toString(origImage.getHeight())+")"+
-                        " - Fraction: ("+Float.toString(targetSizeX)+","+Float.toString(targetSizeY)+")"+
-                        " - Scaling factor: "+Float.toString(scalingFactor));
+                        " - Fraction: ("+Float.toString(targetRatioX)+","+Float.toString(targetRatioY)+")"+
+                        " - Using ratio: "+Float.toString(targetRatio));
 
-        ResampleOp resampleOp = new ResampleOp(DimensionConstrain.createRelativeDimension(
-                scalingFactor*targetSizeX,scalingFactor*targetSizeY));
+        ResampleOp resampleOp = new ResampleOp(DimensionConstrain.createRelativeDimension(targetRatio, targetRatio));
         resampleOp.setUnsharpenMask(AdvancedResizeOp.UnsharpenMask.Normal);
+
         return resampleOp.filter(origImage, null);
     }
-
-    private static double getScalingFactor(BufferedImage img){
-        // scaling factor to match img's DPI
-        double scale = 1.0;
-        double scaleX = Consts.A4_W_INCHES * Consts.INCH_TO_POINT / img.getWidth();
-        double scaleY = Consts.A4_H_INCHES * Consts.INCH_TO_POINT / img.getHeight();
-
-        if (0.0 < scaleX && scaleX <= 1.0) {
-            scale = scaleX;
-        } else {
-            if (0.0 < scaleY && scaleY <= 1.0) {
-                scale = scaleY;
-            }
-        }
-        return scale;
-    }
-
 
     public static BufferedImage sanitizeImage(RenderedImage origRi, boolean applyAlpha) {
         BufferedImage image;
@@ -73,6 +66,14 @@ public class ImageHelper {
         return image;
     }
 
+    public static Object hasLandscapeOrientation(BufferedImage img) {
+        if(img.getWidth() > img.getHeight()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private static BufferedImage convertToRGB(BufferedImage src){
         BufferedImage dst = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
         ColorConvertOp op = new ColorConvertOp(null);
@@ -83,11 +84,11 @@ public class ImageHelper {
         // Because of that artifact, ImageHelper.gammaCorrection() is available.
         ColorSpace origCs = src.getColorModel().getColorSpace();
         if (!origCs.isCS_sRGB()){
-          if(ColorSpace.TYPE_CMYK == origCs.getType()){
-              Logger.getLogger(ImageHelper.class.getName()).log(Level.INFO,
-                      "Applying CMYK to sRGB gamma correction: "+Consts.CMYK_RGB_GAMMA_CORRECTION);
-              dst = gammaCorrection(dst,Consts.CMYK_RGB_GAMMA_CORRECTION);
-          }
+            if(ColorSpace.TYPE_CMYK == origCs.getType()){
+                Logger.getLogger(ImageHelper.class.getName()).log(Level.INFO,
+                        "Applying CMYK to sRGB gamma correction: "+Consts.CMYK_RGB_GAMMA_CORRECTION);
+                dst = gammaCorrection(dst,Consts.CMYK_RGB_GAMMA_CORRECTION);
+            }
         }
         return dst;
     }
@@ -163,4 +164,5 @@ public class ImageHelper {
         return newPixel;
 
     }
+
 }

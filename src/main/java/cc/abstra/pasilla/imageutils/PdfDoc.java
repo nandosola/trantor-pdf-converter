@@ -8,9 +8,10 @@ package cc.abstra.pasilla.imageutils;
 import org.apache.pdfbox.pdfparser.PDFStreamParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDPixelMap;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import org.apache.pdfbox.preflight.PreflightDocument;
 import org.apache.pdfbox.preflight.ValidationResult;
@@ -28,6 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PdfDoc {
+    public static final float PDFBOX_DEFAULT_USER_SPACE_UNIT_DPI = 72.0f;
 
     //TODO: isSigned: See http://blog.javabien.net/2009/05/01/pdfbox-to-unit-test-pdf-files/
 
@@ -104,8 +106,15 @@ public class PdfDoc {
                 Map<String, Object> pageInfo = new LinkedHashMap<>();
                 PDPage currentPage = (PDPage)pdPage;
 
+                BufferedImage img = currentPage.convertToImage(BufferedImage.TYPE_INT_RGB, Consts.PREVIEW_DPI);
+                float scaleDownFactor = Consts.PREVIEW_DPI/PDFBOX_DEFAULT_USER_SPACE_UNIT_DPI;  //required by PDFBox.convertToImage()
+
+                //TODO Subclass org.apache.pdfbox.pdfviewer.PageDrawer if there's too much antialiasing
+
+                pageInfo.put(Consts.IMAGE_KEY, ImageHelper.resizeImageToDINA4WithDPI(img, Consts.PREVIEW_DPI, scaleDownFactor));
+
                 pageInfo.put(Consts.PAGE_SIZE_KEY, PDPage.PAGE_SIZE_A4);  //default preview size
-                pageInfo.put(Consts.IMAGE_KEY, currentPage);
+                pageInfo.put(Consts.LANDSCAPE_KEY, ImageHelper.hasLandscapeOrientation(img));
                 pageList.add(pageInfo);
             }
 
@@ -138,14 +147,28 @@ public class PdfDoc {
                 if (imgKey instanceof BufferedImage) {
                     BufferedImage bi = (BufferedImage) imgKey;
 
-                    page = new PDPage(PDPage.PAGE_SIZE_A4);
-                    ximage = new PDJpeg(pdDoc, bi);
+                    PDRectangle pageSize = (PDRectangle)image.get(Consts.PAGE_SIZE_KEY);
+                    page = new PDPage(pageSize);
+                    page.setMediaBox(pageSize);
 
-                    double vOffset = (Consts.A4_H_INCHES * Consts.INCH_TO_POINT) - ximage.getHeight();
-                    double hOffset = 0;
+                    ximage = new PDPixelMap(pdDoc, bi);  //embeds PNG image
 
-                    contentStream = new PDPageContentStream(pdDoc, page);
+                    double vOffset, hOffset;
+                    if ((boolean)image.get(Consts.LANDSCAPE_KEY)){
+                        float pageWidth = pageSize.getWidth();
+                        page.setRotation(90);
+                        contentStream = new PDPageContentStream(pdDoc, page);
+                        contentStream.concatenate2CTM(0, 1, -1, 0, pageWidth, 0);
+                        vOffset = 0;
+                        hOffset = ((Consts.A4_W_INCHES * Consts.INCH_TO_POINT) - ximage.getWidth())/2.0;
+                    } else {
+                        vOffset = ((Consts.A4_H_INCHES * Consts.INCH_TO_POINT) - ximage.getHeight())/2.0;
+                        hOffset = 0;
+                        contentStream = new PDPageContentStream(pdDoc, page);
+                    }
+
                     contentStream.drawImage(ximage, (float) hOffset, (float) vOffset);
+
                     contentStream.close();
                     bi.flush();
 

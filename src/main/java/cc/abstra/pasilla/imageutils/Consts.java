@@ -9,8 +9,7 @@ import java.awt.color.ColorSpace;
 public class Consts {
 
     public static final String IMAGEIO_API_VERSION = "javax_imageio_1.0";
-    public static final int PREVIEW_DPI = 72;
-    public static final int PRINTING_DPI = 300;
+    public static final int PREVIEW_DPI = 300;
     public static final int MIN_DPI = 72;
     public static final int CORRUPT_DPI = -1;
     public static final double A4_W_INCHES = 8.26771654;
@@ -22,10 +21,7 @@ public class Consts {
     public static final int FIRST_PAGE = 0;
     public static final double INCH_TO_MM = 25.4;
     public static final double INCH_TO_CM = 2.54;
-    public static final double POINT_TO_INCH = 0.0138888889;  //PostScript point
     public static final double INCH_TO_POINT = 72;
-    public static final String SUBSAMPLE_AVG = "SubsampleAverage";
-    public static final int LANDSCAPE_ROTATION = 270;
     public static final String LANDSCAPE_KEY = "landscape";
     public static final String IMAGE_KEY = "img";
     public static final String PAGE_SIZE_KEY = "size";

@@ -9,6 +9,7 @@ import cc.abstra.pasilla.imageutils.exceptions.*;
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.imageio.plugins.tiff.TIFFDirectory;
 import com.sun.media.jai.codecimpl.TIFFImageDecoder;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.sanselan.ImageInfo;
 import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.Sanselan;
@@ -124,10 +125,13 @@ public class TiffDoc {
                     ri = getTiffImageReaderForImage(tis).read(Consts.FIRST_PAGE, null);
                 }
                 BufferedImage img = ImageHelper.resizeImageToDINA4WithDPI(
-                        ImageHelper.sanitizeImage(ri, true),
+                        ImageHelper.sanitizeImage(ri, true), Consts.PREVIEW_DPI, Consts.PREVIEW_DPI,
                         dpiRes.get(Consts.TIFFMetadata.X_RES), dpiRes.get(Consts.TIFFMetadata.Y_RES));
 
                 imgInfo.put(Consts.IMAGE_KEY, img);
+                imgInfo.put(Consts.LANDSCAPE_KEY, ImageHelper.hasLandscapeOrientation(img));
+                imgInfo.put(Consts.PAGE_SIZE_KEY, PDPage.PAGE_SIZE_A4);  //default preview size
+
                 imgList.add(imgInfo);
                 img.flush();
             }

@@ -33,7 +33,7 @@
         <isartor.file>isartor-pdfa-2008-08-13.zip</isartor.file>
         <jai.binaries>jai-1_1_3-lib-linux-amd64.tar.gz</jai.binaries>
         <imageio.binaries>jai_imageio-1_1-lib-linux-amd64.tar.gz</imageio.binaries>
-        <pdfbox.version>1.8.0-SNAPSHOT</pdfbox.version>
+        <pdfbox.version>1.8.2</pdfbox.version>
         <rubygem.dir>${project.build.directory}/ruby-gem</rubygem.dir>
     </properties>
 
