@@ -34,6 +34,7 @@
         <imageio.binaries>jai_imageio-1_1-lib-linux-amd64.tar.gz</imageio.binaries>
         <pdfbox.version>1.8.2</pdfbox.version>
         <rubygem.dir>${project.build.directory}/ruby-gem</rubygem.dir>
+        <jodconverter.version>3.0-NX8</jodconverter.version>
     </properties>
 
     <build>
@@ -437,6 +438,11 @@
             <scope>runtime</scope>
             <!-- JRuby version ~> 1.7.3 bundles the whole openssl enchilada, based on 'bcprov-jdk15'.
               For maximum compatibility, please do not alter the artifact, nor its version -->
+        </dependency>
+        <dependency>
+            <groupId>org.artofsolving.jodconverter</groupId>  <!-- LGPL v3+ -->
+            <artifactId>jodconverter-core</artifactId>
+            <version>${jodconverter.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
