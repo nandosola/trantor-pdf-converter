@@ -1,4 +1,4 @@
-package cc.abstra.pasilla.imageutils;
+package cc.abstra.trantor.pdfconverter;
 
 import java.awt.color.ColorSpace;
 

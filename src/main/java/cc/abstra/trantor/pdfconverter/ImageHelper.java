@@ -1,4 +1,4 @@
-package cc.abstra.pasilla.imageutils;
+package cc.abstra.trantor.pdfconverter;
 
 import com.mortennobel.imagescaling.AdvancedResizeOp;
 import com.mortennobel.imagescaling.DimensionConstrain;

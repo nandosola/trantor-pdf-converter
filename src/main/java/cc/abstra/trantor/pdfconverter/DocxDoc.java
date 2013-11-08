@@ -1,11 +1,11 @@
-package cc.abstra.pasilla.imageutils;
+package cc.abstra.trantor.pdfconverter;
 
 /**
  *
  * @author nando
  */
 
-import cc.abstra.pasilla.imageutils.services.OpenOfficeService;
+import cc.abstra.trantor.pdfconverter.services.OpenOfficeService;
 import org.artofsolving.jodconverter.OfficeDocumentConverter;
 
 import java.io.File;

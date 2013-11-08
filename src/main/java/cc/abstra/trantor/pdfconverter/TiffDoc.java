@@ -1,11 +1,11 @@
-package cc.abstra.pasilla.imageutils;
+package cc.abstra.trantor.pdfconverter;
 
 /**
  *
  * @author nando
  */
 
-import cc.abstra.pasilla.imageutils.exceptions.*;
+import cc.abstra.trantor.pdfconverter.exceptions.*;
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.imageio.plugins.tiff.TIFFDirectory;
 import com.sun.media.jai.codecimpl.TIFFImageDecoder;

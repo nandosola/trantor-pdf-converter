@@ -1,4 +1,4 @@
-package cc.abstra.pasilla.imageutils.exceptions;
+package cc.abstra.trantor.pdfconverter.exceptions;
 
 /**
  *

@@ -1,4 +1,4 @@
-package cc.abstra.pasilla.imageutils;
+package cc.abstra.trantor.pdfconverter;
 
 import junit.framework.Assert;
 import org.junit.Before;
@@ -8,8 +8,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class PdfDocTest {
 

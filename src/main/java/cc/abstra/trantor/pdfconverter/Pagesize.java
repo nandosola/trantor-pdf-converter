@@ -1,4 +1,4 @@
-package cc.abstra.pasilla.imageutils;
+package cc.abstra.trantor.pdfconverter;
 
 /*******************************************************************************
  * $Id: Pagesize.java 98 2008-02-27 06:11:26Z sjardine $

@@ -13,12 +13,12 @@
         </license>
     </licenses>
     <groupId>cc.abstra.pasilla</groupId>
-    <artifactId>imageutils</artifactId>
-    <version>0.0.5</version>
+    <artifactId>trantor-pdf-converter</artifactId>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
 
-    <name>imageutils</name>
-    <url>http://github.com/nandosola/imageutils</url>
+    <name>trantor-pdf-converter</name>
+    <url>http://github.com/nandosola/trantor-pdf-converter</url>
     <developers>
         <developer>
             <id>nandosola</id>
@@ -36,6 +36,30 @@
         <rubygem.dir>${project.build.directory}/ruby-gem</rubygem.dir>
         <jodconverter.version>3.0-NX8</jodconverter.version>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>download-test-files</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <skipTestDownloads>false</skipTestDownloads>
+            </properties>
+        </profile>
+        <profile>
+            <id>skip-test-downloads</id>
+            <activation>
+                <property>
+                    <name>skipTests</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <skipTestDownloads>true</skipTestDownloads>
+            </properties>
+        </profile>
+    </profiles>
 
     <build>
         <extensions>
@@ -90,6 +114,7 @@
                             <goal>download-single</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipTestDownloads}</skip>
                             <serverId>my-s3-account</serverId>
                             <url>https://s3-eu-west-1.amazonaws.com/dev-stuff/imageutils</url>
                             <fromFile>test-resource-tiffs.zip</fromFile>
@@ -106,6 +131,7 @@
                             <goal>download-single</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipTestDownloads}</skip>
                             <serverId>pdflib</serverId>
                             <url>http://www.pdflib.com/fileadmin/pdflib/Bavaria</url>
                             <fromFile>${bavaria.file}</fromFile>
@@ -122,6 +148,7 @@
                             <goal>download-single</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipTestDownloads}</skip>
                             <serverId>pdfa-association</serverId>
                             <url>http://www.pdfa.org/wp-content/uploads/2011/08</url>
                             <fromFile>${isartor.file}</fromFile>
@@ -142,6 +169,7 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipTestDownloads}</skip>
                             <target name="unzip-and-copy-test-files">
                                 <untar src="${project.build.directory}/temp/${jai.binaries}"
                                        dest="${rubygem.dir}/lib/ext/linux-amd64"
@@ -253,7 +281,7 @@
                                 <resource>
                                     <directory>src/non-packaged-resources</directory>
                                     <includes>
-                                        <include>imageutils.gemspec</include>
+                                        <include>pdfconverter.gemspec</include>
                                     </includes>
                                     <filtering>true</filtering>
                                 </resource>
@@ -261,7 +289,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-imageutils-loader</id>
+                        <id>copy-trantor-pdf-converter-loader</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -272,7 +300,7 @@
                                 <resource>
                                     <directory>src/non-packaged-resources</directory>
                                     <includes>
-                                        <include>imageutils.rb</include>
+                                        <include>pdfconverter.rb</include>
                                     </includes>
                                 </resource>
                             </resources>
