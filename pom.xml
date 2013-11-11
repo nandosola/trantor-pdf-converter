@@ -45,6 +45,7 @@
             </activation>
             <properties>
                 <skipTestDownloads>false</skipTestDownloads>
+                <skipLibDownloads>false</skipLibDownloads>
             </properties>
         </profile>
         <profile>
@@ -57,6 +58,17 @@
             </activation>
             <properties>
                 <skipTestDownloads>true</skipTestDownloads>
+                <skipLibDownloads>false</skipLibDownloads>
+            </properties>
+        </profile>
+        <profile>
+            <id>skip-downloads</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <skipTestDownloads>true</skipTestDownloads>
+                <skipLibDownloads>true</skipLibDownloads>
             </properties>
         </profile>
     </profiles>
@@ -82,6 +94,7 @@
                             <goal>download-single</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipLibDownloads}</skip>
                             <!-- Installation instructions:
                               http://download.java.net/media/jai/builds/release/1_1_3/INSTALL.html -->
                             <serverId>java-net</serverId>
@@ -97,6 +110,7 @@
                             <goal>download-single</goal>
                         </goals>
                         <configuration>
+                            <skip>${skipLibDownloads}</skip>
                             <!-- Installation instructions:
                               http://download.java.net/media/jai-imageio/builds/release/1.1/INSTALL-jai_imageio.html -->
                             <serverId>java-net</serverId>

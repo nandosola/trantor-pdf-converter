@@ -15,10 +15,8 @@ import org.artofsolving.jodconverter.OfficeDocumentConverter;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class OfficeDocConverter {
+public abstract class OfficeDocConverter {
     private OfficeDocumentConverter converter;
     private File document;
     
