@@ -31,4 +31,5 @@ target/
 .classpath
 src/test/resources/pdf-files/
 src/test/resources/tiff-files/
-
+target/*
+nb-configuration.xml
