@@ -10,11 +10,11 @@ package cc.abstra.trantor.pdfconverter.office;
  *
  * @author obs
  */
-public class Odt extends OfficeDoc{
-
-  public Odt(String OfficeDocPath) {
-    super(OfficeDocPath);
-  }
+public class OdtConverter extends OfficeDocConverter{
+    public OdtConverter(){}
+    public OdtConverter(String OfficeDocPath) {
+        super();
+    }
 
   
 }

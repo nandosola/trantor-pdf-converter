@@ -10,7 +10,10 @@ package cc.abstra.trantor.pdfconverter.office;
  *
  * @author obs
  */
-public interface FactoryMethodOfficeDoc {
+public class DocxConverter extends OfficeDocConverter{
+    public DocxConverter(){}
+    public DocxConverter(String OfficeDocPath) {
+        super();
+    }
   
-  public OfficeDoc createOfficeDocConversor(String OfficeDocumentPath);
 }

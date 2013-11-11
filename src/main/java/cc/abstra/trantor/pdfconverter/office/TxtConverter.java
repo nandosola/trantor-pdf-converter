@@ -10,10 +10,10 @@ package cc.abstra.trantor.pdfconverter.office;
  *
  * @author obs
  */
-public class Docx extends OfficeDoc{
-
-  public Docx(String OfficeDocPath) {
-    super(OfficeDocPath);
-  }
+public class TxtConverter extends OfficeDocConverter{
+    public TxtConverter(){}
+    public TxtConverter(String OfficeDocPath) {
+        super();
+    }
   
 }
