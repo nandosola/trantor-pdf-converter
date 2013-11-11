@@ -23,6 +23,8 @@ public class OpenOfficeService {
 
             //OS X: cd /Applications/LibreOffice.app/Contents/MacOS/
             //      sudo ln -s ./soffice soffice.bin
+            // FIXED in master:
+            //   https://github.com/nuxeo/jodconverter/commit/30eb0644a217081ce936a866ac6be411c62c6f49
             officeManager = new DefaultOfficeManagerConfiguration().
                     setPortNumbers(ports).
                     buildOfficeManager();
