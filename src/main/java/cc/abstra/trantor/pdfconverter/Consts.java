@@ -56,6 +56,7 @@ public class Consts {
         //strings in a PDF
         public static final String TEXT_OPERATOR = "tj";
         public static final String REQUIRED_VERSION = "1.4";
+        public static final String MIME_TYPE = "application/pdf";
     }
 
     private Consts() {

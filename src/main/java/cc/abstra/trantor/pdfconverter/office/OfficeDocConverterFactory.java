@@ -16,6 +16,7 @@ import cc.abstra.trantor.pdfconverter.services.OpenOfficeService;
 import org.artofsolving.jodconverter.OfficeDocumentConverter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +25,7 @@ public class OfficeDocConverterFactory{
     private OfficeDocConverterFactory(){}
     
     public static OfficeDocConverter getConverter(String OfficeDocumentPath) 
-            throws NotSupportedDocumentException{
+            throws NotSupportedDocumentException, FileNotFoundException{
         String className = null;
         String extension = getOfficeFileExtension(OfficeDocumentPath);
         File officeFile = new File(OfficeDocumentPath);

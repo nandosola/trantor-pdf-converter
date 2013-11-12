@@ -14,6 +14,7 @@ package cc.abstra.trantor.pdfconverter.office;
 import org.artofsolving.jodconverter.OfficeDocumentConverter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public abstract class OfficeDocConverter {
@@ -26,15 +27,18 @@ public abstract class OfficeDocConverter {
         this.converter = converter;
     }
 
-    public void setDocument(File document) {
-        this.document = document;
+    public void setDocument(File document) throws FileNotFoundException {
+        if(document.exists()) {
+            this.document = document;
+        } else {
+            throw new FileNotFoundException();
+        }
     }
     
     
     public void toPdf(String pdfPath) throws IOException {
-        File pdfOutput = new File(pdfPath);
         long startTime = System.currentTimeMillis();
-        converter.convert(document, pdfOutput);
+        converter.convert(document,  new File(pdfPath));
     }
     
     
