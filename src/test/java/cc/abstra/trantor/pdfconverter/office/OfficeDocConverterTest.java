@@ -105,7 +105,9 @@ public class OfficeDocConverterTest {
            officeDocumentConverter.toPdf(dst);
            Assert.assertTrue(new File(dst).exists());
            String mime = Files.probeContentType(dstPath);
-           Assert.assertEquals(mime, Consts.PDFMetadata.MIME_TYPE);
+           // Will return null on OS X.
+           // See: http://stackoverflow.com/questions/12407479/why-does-files-probecontenttype-return-null
+           Assert.assertEquals(Consts.PDFMetadata.MIME_TYPE, mime);
         }
     }
 }

@@ -50,9 +50,9 @@ public class OpenOfficeService {
         return officeManager;
     }
 
-    public static void logElapsedTime(long startTime, String verb) {
+    public static void logElapsedTime(long startTime, String prefix) {
         long elapsedTime = System.currentTimeMillis() - startTime;
         Logger.getLogger(OpenOfficeService.class.getName()).log(Level.INFO,
-                String.format(verb + " OfficeManager in %dms", elapsedTime));
+                String.format(prefix + " in %dms", elapsedTime));
     }
 }
