@@ -14,7 +14,7 @@
     </licenses>
     <groupId>cc.abstra.pasilla</groupId>
     <artifactId>trantor-pdf-converter</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <packaging>jar</packaging>
 
     <name>trantor-pdf-converter</name>
@@ -37,9 +37,9 @@
         <isartor.file>isartor-pdfa-2008-08-13.zip</isartor.file>
         <jai.binaries>jai-1_1_3-lib-linux-amd64.tar.gz</jai.binaries>
         <imageio.binaries>jai_imageio-1_1-lib-linux-amd64.tar.gz</imageio.binaries>
-        <pdfbox.version>1.8.2</pdfbox.version>
+        <pdfbox.version>1.8.4</pdfbox.version>
         <rubygem.dir>${project.build.directory}/ruby-gem</rubygem.dir>
-        <jodconverter.version>3.0-NX8</jodconverter.version>
+        <jodconverter.version>3.0-NX10</jodconverter.version>
     </properties>
 
     <profiles>

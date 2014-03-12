@@ -38,6 +38,8 @@ Thus, any Java application using `imageutils` should declare the variables above
  have a look at the project's `pom.xml`.
 * AFAIK, [there is a bug](https://github.com/rubygems/rubygems/issues/507) up to JRuby 1.7.3 that prevents pushing gems to RubyGems.
  So if you want to publish your own gem, at least 1.7.4-dev should be used. In my case, the gem was pushed via MRI 1.9.3.
+* PDF conversion tests will fail under OS X with JDK7. See [this post](http://stackoverflow.com/questions/12407479/why-does-files-probecontenttype-return-null) on StackOverflow.
+* On OS X, it might me necessary to create the symlink: `soffice.bin -> ./soffice` under `/Applications/LibreOffice.app/Contents/MacOS`. Just execute the integration tests and check the error messages.
 
 ## TODO
 
