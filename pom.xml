@@ -14,7 +14,7 @@
     </licenses>
     <groupId>cc.abstra.pasilla</groupId>
     <artifactId>trantor-pdf-converter</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.3</version>
     <packaging>jar</packaging>
 
     <name>trantor-pdf-converter</name>
@@ -35,8 +35,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <bavaria.file>2009-04-03-Bavaria-pdfa.zip</bavaria.file>
         <isartor.file>isartor-pdfa-2008-08-13.zip</isartor.file>
-        <jai.binaries>jai-1_1_3-lib-linux-amd64.tar.gz</jai.binaries>
-        <imageio.binaries>jai_imageio-1_1-lib-linux-amd64.tar.gz</imageio.binaries>
+        <jai.binaries.amd64>jai-1_1_3-lib-linux-amd64.tar.gz</jai.binaries.amd64>
+        <imageio.binaries.amd64>jai_imageio-1_1-lib-linux-amd64.tar.gz</imageio.binaries.amd64>
+        <jai.binaries.i586>jai-1_1_3-lib-linux-amd64.tar.gz</jai.binaries.i586>
+        <imageio.binaries.i586>jai_imageio-1_1-lib-linux-amd64.tar.gz</imageio.binaries.i586>
         <pdfbox.version>1.8.4</pdfbox.version>
         <rubygem.dir>${project.build.directory}/ruby-gem</rubygem.dir>
         <jodconverter.version>3.0-NX10</jodconverter.version>
@@ -93,7 +95,7 @@
                 <version>1.0-beta-4</version>
                 <executions>
                     <execution>
-                        <id>download-jai-binaries</id>
+                        <id>download-jai-binaries-amd64</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>download-single</goal>
@@ -104,12 +106,12 @@
                               http://download.java.net/media/jai/builds/release/1_1_3/INSTALL.html -->
                             <serverId>java-net</serverId>
                             <url>http://download.java.net/media/jai/builds/release/1_1_3</url>
-                            <fromFile>${jai.binaries}</fromFile>
+                            <fromFile>${jai.binaries.amd64}</fromFile>
                             <toDir>${project.build.directory}/temp</toDir>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>download-imageio-binaries</id>
+                        <id>download-imageio-binaries-amd64</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>download-single</goal>
@@ -120,7 +122,35 @@
                               http://download.java.net/media/jai-imageio/builds/release/1.1/INSTALL-jai_imageio.html -->
                             <serverId>java-net</serverId>
                             <url>http://download.java.net/media/jai-imageio/builds/release/1.1</url>
-                            <fromFile>${imageio.binaries}</fromFile>
+                            <fromFile>${imageio.binaries.amd64}</fromFile>
+                            <toDir>${project.build.directory}/temp</toDir>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-jai-binaries-i586</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>download-single</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipLibDownloads}</skip>
+                            <serverId>java-net</serverId>
+                            <url>http://download.java.net/media/jai/builds/release/1_1_3</url>
+                            <fromFile>${jai.binaries.i586}</fromFile>
+                            <toDir>${project.build.directory}/temp</toDir>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-imageio-binaries-i586</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>download-single</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipLibDownloads}</skip>
+                            <serverId>java-net</serverId>
+                            <url>http://download.java.net/media/jai-imageio/builds/release/1.1</url>
+                            <fromFile>${imageio.binaries.i586}</fromFile>
                             <toDir>${project.build.directory}/temp</toDir>
                         </configuration>
                     </execution>
@@ -181,6 +211,67 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.7</version>
                 <executions>
+                  <execution>
+                        <id>create-java-ext-directory</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target name="create-java-ext-directory">
+                              <mkdir dir="${rubygem.dir}/lib/ext/java"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unzip-imageio-data</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipLibDownloads}</skip>
+                            <target name="unzip-and-copy-imageio-files">
+                              <mkdir dir="${rubygem.dir}/lib/ext/java"/>
+                                <untar src="${project.build.directory}/temp/${jai.binaries.amd64}"
+                                       dest="${rubygem.dir}/lib/ext/linux-amd64"
+                                       compression="gzip">
+                                    <patternset>
+                                        <include name="**/lib/libmlib_jai.so"/>
+                                        <include name="**/lib/mlibwrapper_jai.jar"/>
+                                    </patternset>
+                                    <mapper type="flatten"/>
+                                </untar>
+                                <untar src="${project.build.directory}/temp/${imageio.binaries.amd64}"
+                                       dest="${rubygem.dir}/lib/ext/linux-amd64"
+                                       compression="gzip">
+                                    <patternset>
+                                        <include name="**/lib/libclib_jiio.so"/>
+                                        <include name="**/lib/clibwrapper_jiio.jar"/>
+                                    </patternset>
+                                    <mapper type="flatten"/>
+                                </untar>
+                                <untar src="${project.build.directory}/temp/${jai.binaries.i586}"
+                                       dest="${rubygem.dir}/lib/ext/linux-i586"
+                                       compression="gzip">
+                                    <patternset>
+                                        <include name="**/lib/libmlib_jai.so"/>
+                                        <include name="**/lib/mlibwrapper_jai.jar"/>
+                                    </patternset>
+                                    <mapper type="flatten"/>
+                                </untar>
+                                <untar src="${project.build.directory}/temp/${imageio.binaries.i586}"
+                                       dest="${rubygem.dir}/lib/ext/linux-i586"
+                                       compression="gzip">
+                                    <patternset>
+                                        <include name="**/lib/libclib_jiio.so"/>
+                                        <include name="**/lib/clibwrapper_jiio.jar"/>
+                                    </patternset>
+                                    <mapper type="flatten"/>
+                                </untar>
+                            </target>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>unzip-test-data</id>
                         <phase>process-resources</phase>
@@ -190,25 +281,6 @@
                         <configuration>
                             <skip>${skipTestDownloads}</skip>
                             <target name="unzip-and-copy-test-files">
-                                <untar src="${project.build.directory}/temp/${jai.binaries}"
-                                       dest="${rubygem.dir}/lib/ext/linux-amd64"
-                                       compression="gzip">
-                                    <patternset>
-                                        <include name="**/lib/libmlib_jai.so"/>
-                                        <include name="**/lib/mlibwrapper_jai.jar"/>
-                                    </patternset>
-                                    <mapper type="flatten"/>
-                                </untar>
-
-                                <untar src="${project.build.directory}/temp/${imageio.binaries}"
-                                       dest="${rubygem.dir}/lib/ext/linux-amd64"
-                                       compression="gzip">
-                                    <patternset>
-                                        <include name="**/lib/libclib_jiio.so"/>
-                                        <include name="**/lib/clibwrapper_jiio.jar"/>
-                                    </patternset>
-                                    <mapper type="flatten"/>
-                                </untar>
 
                                 <unzip src="${project.build.directory}/temp/test-resource-tiffs.zip"
                                        dest="${project.basedir}/src/test/resources/tiff-files" />
@@ -381,7 +453,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${rubygem.dir}/lib</outputDirectory>
+                          <outputDirectory>${rubygem.dir}/lib/ext/java</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
@@ -404,7 +476,7 @@
                                     <type>${project.packaging}</type>
                                 </artifactItem>
                             </artifactItems>
-                            <outputDirectory>${rubygem.dir}/lib</outputDirectory>
+                            <outputDirectory>${rubygem.dir}/lib/ext/java</outputDirectory>
                             <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>

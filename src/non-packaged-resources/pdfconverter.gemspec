@@ -15,6 +15,6 @@ Gem::Specification.new do |s|
   s.licenses << 'GNU Lesser General Public License, Version 3.0'
   s.files += Dir['./LICENSE']
   s.files += Dir['3rd-party-licenses/**/*']
-  s.files += Dir['lib/*.jar']
+  s.files += Dir['lib/*']
   s.files += Dir['lib/**/*']
 end
