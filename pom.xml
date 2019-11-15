@@ -39,7 +39,7 @@
         <imageio.binaries.amd64>jai_imageio-1_1-lib-linux-amd64.tar.gz</imageio.binaries.amd64>
         <jai.binaries.i586>jai-1_1_3-lib-linux-amd64.tar.gz</jai.binaries.i586>
         <imageio.binaries.i586>jai_imageio-1_1-lib-linux-amd64.tar.gz</imageio.binaries.i586>
-        <pdfbox.version>1.8.4</pdfbox.version>
+        <pdfbox.version>1.8.16</pdfbox.version>
         <rubygem.dir>${project.build.directory}/ruby-gem</rubygem.dir>
         <jodconverter.version>3.0-NX10</jodconverter.version>
     </properties>
@@ -559,7 +559,7 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15</artifactId>
-            <version>1.46</version>
+            <version>1.60</version>
             <scope>runtime</scope>
             <!-- JRuby version ~> 1.7.3 bundles the whole openssl enchilada, based on 'bcprov-jdk15'.
               For maximum compatibility, please do not alter the artifact, nor its version -->
